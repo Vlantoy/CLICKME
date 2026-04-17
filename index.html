@@ -162,20 +162,26 @@
       if (idx < words.length) {
         var isLast = (idx === words.length - 1);
         if (isLast) {
+          /* Show last word big, then auto-reveal full sentence */
           mainText.innerHTML = "";
-          mainText.classList.add("full");
-          words.forEach(function(w) {
-            var sp = document.createElement("span");
-            sp.className = "word";
-            sp.textContent = w;
-            mainText.appendChild(sp);
-          });
-          for (var di = idx; di < words.length; di++) {
-            document.getElementById("dot-" + di).classList.add("filled");
-          }
+          var lastSpan = document.createElement("span");
+          lastSpan.className = "word";
+          lastSpan.textContent = words[idx];
+          mainText.appendChild(lastSpan);
+          document.getElementById("dot-" + idx).classList.add("filled");
           idx = words.length;
           done = true;
-          setTimeout(function() { finalMsg.classList.add("show"); }, 900);
+          setTimeout(function() {
+            mainText.innerHTML = "";
+            mainText.classList.add("full");
+            words.forEach(function(w) {
+              var sp = document.createElement("span");
+              sp.className = "word";
+              sp.textContent = w;
+              mainText.appendChild(sp);
+            });
+            setTimeout(function() { finalMsg.classList.add("show"); }, 700);
+          }, 1000);
         } else {
           mainText.innerHTML = "";
           var span = document.createElement("span");
