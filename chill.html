@@ -96,9 +96,6 @@ h1{font-size:clamp(2rem,7vw,3.2rem);font-weight:700;
     <div class="bar-label">Intuition</div>
     <div class="bar-bg"><div class="bar-fill" id="b3"></div></div>
   </div>
-  <div class="invite" id="invite">
-    &#127774; Ch&#7911; Nh&#7853;t... ra ngo&#224;i ch&#249;t kh&#244;ng?
-  </div>
 </div>
 
 <!-- phase 2: word-by-word invite -->
@@ -126,10 +123,6 @@ setTimeout(function(){
   document.getElementById("b2").style.width="92%";
   document.getElementById("b3").style.width="85%";
 },400);
-setTimeout(function(){
-  document.getElementById("invite").classList.add("show");
-},2200);
-
 // Transition to word-by-word after 5s
 setTimeout(function(){
   var card=document.querySelector('.card');
