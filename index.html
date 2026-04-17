@@ -1,288 +1,177 @@
-﻿PS D:\LMHT\sunday-invite> Set-Content -Path "d:\LMHT\sunday-invite\index.html" -
-Encoding UTF8 -Value @'
->> <!DOCTYPE html>
->> <html lang="vi">
->> <head>
->>   <meta charset="UTF-8" />
->>   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
->>   <title>âœ¨ Cho Tá»› Há»i âœ¨</title>
->>   <link
->>     href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wgh
-t@400;700&display=swap"
->>     rel="stylesheet"
->>   />
->>   <style>
->>     * { margin: 0; padding: 0; box-sizing: border-box; }
->>
->>     body {
->>       min-height: 100vh;
->>       background: linear-gradient(
->>         135deg,
->>         #ffd6e7 0%, #ffb3d1 25%,
->>         #e8b4f8 50%, #c9a6f5 75%,
->>         #a8d8f0 100%
->>       );
->>       background-size: 400% 400%;
->>       animation: gradientShift 10s ease infinite;
->>       font-family: "Nunito", sans-serif;
->>       cursor: pointer;
->>       user-select: none;
->>       overflow: hidden;
->>       display: flex;
->>       flex-direction: column;
->>       align-items: center;
->>       justify-content: center;
->>     }
->>
->>     @keyframes gradientShift {
->>       0%   { background-position: 0% 50%;   }
->>       50%  { background-position: 100% 50%; }
->>       100% { background-position: 0% 50%;   }
->>     }
->>
->>     .particle {
->>       position: fixed;
->>       pointer-events: none;
->>       animation: floatUp linear infinite;
->>       opacity: 0;
->>     }
->>
->>     @keyframes floatUp {
->>       0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0;  }     
->>       10%  { opacity: 0.8; }
->>       90%  { opacity: 0.8; }
->>       100% { transform: translateY(-10vh)  rotate(360deg); opacity: 0; }     
->>     }
->>
->>     .container {
->>       text-align: center;
->>       padding: 2rem;
->>       max-width: 860px;
->>       width: 90%;
->>       display: flex;
->>       flex-direction: column;
->>       align-items: center;
->>       gap: 2rem;
->>     }
->>
->>     #mainText {
->>       font-family: "Pacifico", cursive;
->>       font-size: clamp(2.4rem, 6.5vw, 5rem);
->>       color: #fff;
->>       text-shadow:
->>         2px  2px 0   #e91e8c,
->>         4px  4px 0   #c2185b,
->>         0    0   40px rgba(233, 30, 140, 0.5);
->>       letter-spacing: 3px;
->>       line-height: 1.65;
->>       min-height: 1.65em;
->>       word-break: break-word;
->>     }
->>
->>     .word {
->>       display: inline-block;
->>       animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;    
->>     }
->>
->>     @keyframes popIn {
->>       0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
->>       60%  { transform: scale(1.35) rotate(5deg); }
->>       100% { transform: scale(1) rotate(0deg);  opacity: 1; }
->>     }
->>
->>     #progress {
->>       display: flex;
->>       flex-wrap: wrap;
->>       gap: 8px;
->>       justify-content: center;
->>     }
->>
->>     .dot {
->>       width: 11px;
->>       height: 11px;
->>       border-radius: 50%;
->>       background: rgba(255, 255, 255, 0.28);
->>       transition: background 0.25s, transform 0.25s;
->>     }
->>
->>     .dot.filled {
->>       background: rgba(255, 255, 255, 0.95);
->>       transform: scale(1.5);
->>     }
->>
->>     #hint {
->>       font-size: 1.1rem;
->>       color: rgba(255, 255, 255, 0.9);
->>       font-style: italic;
->>       animation: pulse 1.6s ease-in-out infinite;
->>       letter-spacing: 1px;
->>     }
->>
->>     #hint.hidden { display: none; }
->>
->>     @keyframes pulse {
->>       0%, 100% { opacity: 0.45; transform: scale(1);    }
->>       50%       { opacity: 1;    transform: scale(1.07); }
->>     }
->>
->>     #finalMsg {
->>       font-size: clamp(0.9rem, 2.2vw, 1.15rem);
->>       color: rgba(255, 255, 255, 0.92);
->>       font-style: italic;
->>       letter-spacing: 1.8px;
->>       text-shadow: 1px 1px 5px rgba(180, 0, 80, 0.5);
->>       opacity: 0;
->>       transform: translateY(20px);
->>       transition: opacity 1.3s ease, transform 1.3s ease;
->>     }
->>
->>     #finalMsg.show { opacity: 1; transform: translateY(0); }
->>
->>     /* Flower bloom */
->>     .petal-wrapper {
->>       position: fixed;
->>       pointer-events: none;
->>       z-index: 1000;
->>       width: 0;
->>       height: 0;
->>       transform: rotate(var(--rot));
->>     }
->>
->>     .petal-inner {
->>       font-size: 2rem;
->>       position: absolute;
->>       animation: petalBloom 1.2s ease-out forwards;
->>       animation-delay: var(--delay, 0s);
->>     }
->>
->>     @keyframes petalBloom {
->>       0%   { transform: translate(-50%, -50%) translateY(0px)    scale(0);   
-opacity: 0;   }
->>       15%  {                                                                 
- opacity: 1;   }
->>       35%  { transform: translate(-50%, -50%) translateY(-30px)  scale(1.6); 
-opacity: 1;   }
->>       80%  { transform: translate(-50%, -50%) translateY(-78px)  scale(1.1); 
-opacity: 0.8; }
->>       100% { transform: translate(-50%, -50%) translateY(-110px) scale(0.2); 
-opacity: 0;   }
->>     }
->>
->>     .petal-center {
->>       position: fixed;
->>       pointer-events: none;
->>       z-index: 1001;
->>       font-size: 2rem;
->>       animation: centerPop 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forw
-ards;
->>     }
->>
->>     @keyframes centerPop {
->>       0%   { transform: translate(-50%, -50%) scale(0);   opacity: 1; }      
->>       55%  { transform: translate(-50%, -50%) scale(2.2); opacity: 1; }      
->>       100% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }      
->>     }
->>   </style>
->> </head>
->> <body>
->>   <div class="container">
->>     <div id="mainText"></div>
->>     <div id="progress"></div>
->>     <div id="hint">âœ¨ Báº¥m vÃ o mÃ n hÃ¬nh nhÃ©~ âœ¨</div>
->>     <div id="finalMsg">~ TÃ´i khÃ´ng cho phÃ©p em tá»« chá»‘i ~</div>
->>   </div>
->>
->>   <script>
->>     const fullText = "Chá»§ Nháº­t NÃ y Cáº­u ráº£nh KhÃ´ng Ä‘i chÆ¡i vá»›i tá»› Ä‘iiiiii";   
->>     const words    = fullText.split(" ");
->>     let   idx      = 0;
->>     let   done     = false;
->>
->>     const mainText = document.getElementById("mainText");
->>     const progress = document.getElementById("progress");
->>     const hint     = document.getElementById("hint");
->>     const finalMsg = document.getElementById("finalMsg");
->>
->>     words.forEach((_, i) => {
->>       const dot = document.createElement("div");
->>       dot.className = "dot";
->>       dot.id = "dot-" + i;
->>       progress.appendChild(dot);
->>     });
->>
->>     const bgEmojis = ["ðŸŒ¸", "ðŸ’•", "âœ¨", "ðŸŒº", "ðŸ’«", "ðŸ¦‹", "ðŸ€", "â­", "ðŸŽ€", "
-ðŸ’—", "ðŸŒ·"];
->>
->>     function spawnParticle() {
->>       const el = document.createElement("div");
->>       el.className = "particle";
->>       el.textContent = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
->>       el.style.left     = Math.random() * 100 + "vw";
->>       el.style.fontSize = (Math.random() * 1.4 + 0.7) + "rem";
->>       const dur = Math.random() * 9 + 7;
->>       el.style.animationDuration = dur + "s";
->>       el.style.animationDelay   = (Math.random() * 4) + "s";
->>       document.body.appendChild(el);
->>       setTimeout(() => el.remove(), (dur + 4) * 1000);
->>     }
->>
->>     for (let i = 0; i < 14; i++) spawnParticle();
->>     setInterval(spawnParticle, 1300);
->>
->>     const petalEmojis = ["ðŸŒ¸", "ðŸŒº", "ðŸŒ¹", "ðŸŒ¼", "ðŸ’®", "ðŸŒ·", "ðŸŒ»"];
->>     const PETAL_COUNT = 8;
->>
->>     function createFlowerBloom(x, y) {
->>       for (let i = 0; i < PETAL_COUNT; i++) {
->>         const wrapper = document.createElement("div");
->>         wrapper.className = "petal-wrapper";
->>         wrapper.style.left = x + "px";
->>         wrapper.style.top  = y + "px";
->>         wrapper.style.setProperty("--rot", (i * (360 / PETAL_COUNT)) + "deg")
-;
->>
->>         const inner = document.createElement("div");
->>         inner.className = "petal-inner";
->>         inner.textContent = petalEmojis[Math.floor(Math.random() * petalEmoji
-s.length)];
->>         inner.style.setProperty("--delay", (i * 0.045) + "s");
->>
->>         wrapper.appendChild(inner);
->>         document.body.appendChild(wrapper);
->>         setTimeout(() => wrapper.remove(), 1500);
->>       }
->>
->>       const center = document.createElement("div");
->>       center.className = "petal-center";
->>       center.textContent = "âœ¨";
->>       center.style.left = x + "px";
->>       center.style.top  = y + "px";
->>       document.body.appendChild(center);
->>       setTimeout(() => center.remove(), 900);
->>     }
->>
->>     document.body.addEventListener("click", (e) => {
->>       createFlowerBloom(e.clientX, e.clientY);
->>
->>       if (done) return;
->>       if (idx === 0) hint.classList.add("hidden");
->>
->>       if (idx < words.length) {
->>         const span = document.createElement("span");
->>         span.className = "word";
->>         span.textContent = words[idx] + (idx < words.length - 1 ? "\u00A0" : 
-"");
->>         mainText.appendChild(span);
->>         document.getElementById("dot-" + idx).classList.add("filled");       
->>         idx++;
->>
->>         if (idx === words.length) {
->>           done = true;
->>           setTimeout(() => finalMsg.classList.add("show"), 900);
->>         }
->>       }
->>     });
->>   </script>
->> </body>
->> </html>
->> '@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cho To Hoi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffd6e7 0%, #ffb3d1 25%, #e8b4f8 50%, #c9a6f5 75%, #a8d8f0 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      font-family: "Nunito", sans-serif;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .particle { position: fixed; pointer-events: none; animation: floatUp linear infinite; opacity: 0; }
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) rotate(0deg);  opacity: 0; }
+      10%  { opacity: 0.8; }
+      90%  { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 860px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+    #mainText {
+      font-family: "Pacifico", cursive;
+      font-size: clamp(2.4rem, 6.5vw, 5rem);
+      color: #fff;
+      text-shadow: 2px 2px 0 #e91e8c, 4px 4px 0 #c2185b, 0 0 40px rgba(233,30,140,0.5);
+      letter-spacing: 3px;
+      line-height: 1.65;
+      min-height: 1.65em;
+      word-break: break-word;
+    }
+    .word { display: inline-block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+    @keyframes popIn {
+      0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+      60%  { transform: scale(1.35) rotate(5deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    #progress { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.28); transition: background 0.25s, transform 0.25s; }
+    .dot.filled { background: rgba(255,255,255,0.95); transform: scale(1.5); }
+    #hint { font-size: 1.1rem; color: rgba(255,255,255,0.9); font-style: italic; animation: pulse 1.6s ease-in-out infinite; letter-spacing: 1px; }
+    #hint.hidden { display: none; }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.45; transform: scale(1); }
+      50%       { opacity: 1;    transform: scale(1.07); }
+    }
+    #finalMsg {
+      font-size: clamp(0.9rem, 2.2vw, 1.15rem);
+      color: rgba(255,255,255,0.92);
+      font-style: italic;
+      letter-spacing: 1.8px;
+      text-shadow: 1px 1px 5px rgba(180,0,80,0.5);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.3s ease, transform 1.3s ease;
+    }
+    #finalMsg.show { opacity: 1; transform: translateY(0); }
+    .petal-wrapper { position: fixed; pointer-events: none; z-index: 1000; width: 0; height: 0; transform: rotate(var(--rot)); }
+    .petal-inner { font-size: 2rem; position: absolute; animation: petalBloom 1.2s ease-out forwards; animation-delay: var(--delay, 0s); }
+    @keyframes petalBloom {
+      0%   { transform: translate(-50%,-50%) translateY(0px)    scale(0);   opacity: 0; }
+      15%  {                                                                  opacity: 1; }
+      35%  { transform: translate(-50%,-50%) translateY(-30px)  scale(1.6); opacity: 1; }
+      80%  { transform: translate(-50%,-50%) translateY(-78px)  scale(1.1); opacity: 0.8; }
+      100% { transform: translate(-50%,-50%) translateY(-110px) scale(0.2); opacity: 0; }
+    }
+    .petal-center { position: fixed; pointer-events: none; z-index: 1001; font-size: 2rem; animation: centerPop 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes centerPop {
+      0%   { transform: translate(-50%,-50%) scale(0);   opacity: 1; }
+      55%  { transform: translate(-50%,-50%) scale(2.2); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(0.1); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="mainText"></div>
+    <div id="progress"></div>
+    <div id="hint">✨ Bấm vào màn hình nhé~ ✨</div>
+    <div id="finalMsg">~ Tôi không cho phép em từ chối ~</div>
+  </div>
+  <script>
+    var words = ["Chủ","Nhật","Này","Cậu","rảnh","Không","đi","chơi","với","tớ","điiiiii"];
+    var idx = 0, done = false;
+    var mainText = document.getElementById("mainText");
+    var progress = document.getElementById("progress");
+    var hint     = document.getElementById("hint");
+    var finalMsg = document.getElementById("finalMsg");
+    words.forEach(function(_, i) {
+      var dot = document.createElement("div");
+      dot.className = "dot";
+      dot.id = "dot-" + i;
+      progress.appendChild(dot);
+    });
+    var bgEmojis = ["🌸","💕","✨","🌺","💫","🦋","🍀","⭐","🎀","💗","🌷"];
+    function spawnParticle() {
+      var el = document.createElement("div");
+      el.className = "particle";
+      el.textContent = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = (Math.random() * 1.4 + 0.7) + "rem";
+      var dur = Math.random() * 9 + 7;
+      el.style.animationDuration = dur + "s";
+      el.style.animationDelay = (Math.random() * 4) + "s";
+      document.body.appendChild(el);
+      setTimeout(function() { el.remove(); }, (dur + 4) * 1000);
+    }
+    for (var i = 0; i < 14; i++) spawnParticle();
+    setInterval(spawnParticle, 1300);
+    var petalEmojis = ["🌸","🌺","🌹","🌼","💮","🌷","🌻"];
+    function createFlowerBloom(x, y) {
+      for (var p = 0; p < 8; p++) {
+        var wrapper = document.createElement("div");
+        wrapper.className = "petal-wrapper";
+        wrapper.style.left = x + "px";
+        wrapper.style.top  = y + "px";
+        wrapper.style.setProperty("--rot", (p * 45) + "deg");
+        var inner = document.createElement("div");
+        inner.className = "petal-inner";
+        inner.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+        inner.style.setProperty("--delay", (p * 0.045) + "s");
+        wrapper.appendChild(inner);
+        document.body.appendChild(wrapper);
+        setTimeout(function() { this.remove(); }.bind(wrapper), 1500);
+      }
+      var center = document.createElement("div");
+      center.className = "petal-center";
+      center.textContent = "✨";
+      center.style.left = x + "px";
+      center.style.top  = y + "px";
+      document.body.appendChild(center);
+      setTimeout(function() { center.remove(); }, 900);
+    }
+    document.body.addEventListener("click", function(e) {
+      createFlowerBloom(e.clientX, e.clientY);
+      if (done) return;
+      if (idx === 0) hint.classList.add("hidden");
+      if (idx < words.length) {
+        var span = document.createElement("span");
+        span.className = "word";
+        span.textContent = words[idx] + (idx < words.length - 1 ? " " : "");
+        mainText.appendChild(span);
+        document.getElementById("dot-" + idx).classList.add("filled");
+        idx++;
+        if (idx === words.length) {
+          done = true;
+          setTimeout(function() { finalMsg.classList.add("show"); }, 900);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
