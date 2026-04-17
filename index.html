@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✨ Cho Tớ Hỏi ✨</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(
+        135deg,
+        #ffd6e7 0%,
+        #ffb3d1 25%,
+        #e8b4f8 50%,
+        #c9a6f5 75%,
+        #a8d8f0 100%
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      font-family: "Nunito", sans-serif;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ── Floating particles ── */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0;   }
+      10%  { opacity: 0.75; }
+      90%  { opacity: 0.75; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0;   }
+    }
+
+    /* ── Container ── */
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 720px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.4rem;
+    }
+
+    /* ── Main text ── */
+    #mainText {
+      font-family: "Pacifico", cursive;
+      font-size: clamp(1.6rem, 5vw, 3.2rem);
+      color: #fff;
+      text-shadow:
+        2px  2px 0   #e91e8c,
+        4px  4px 0   #c2185b,
+        0    0   30px rgba(233, 30, 140, 0.5);
+      letter-spacing: 2px;
+      line-height: 1.5;
+      min-height: 2em;
+      word-break: break-word;
+    }
+
+    /* Each character pops in */
+    .char {
+      display: inline-block;
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes popIn {
+      0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+      60%  { transform: scale(1.35) rotate(5deg); }
+      100% { transform: scale(1)  rotate(0deg);  opacity: 1; }
+    }
+
+    /* ── Progress dots ── */
+    #progress {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      max-width: 600px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transition: background 0.25s, transform 0.25s;
+    }
+
+    .dot.filled {
+      background: rgba(255, 255, 255, 0.95);
+      transform: scale(1.4);
+    }
+
+    /* ── Hint ── */
+    #hint {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-style: italic;
+      animation: pulse 1.6s ease-in-out infinite;
+      letter-spacing: 1px;
+    }
+
+    #hint.hidden {
+      display: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.45; transform: scale(1);    }
+      50%       { opacity: 1;    transform: scale(1.07); }
+    }
+
+    /* ── Final secret message ── */
+    #finalMsg {
+      font-size: clamp(0.82rem, 2vw, 1.05rem);
+      color: rgba(255, 255, 255, 0.92);
+      font-style: italic;
+      letter-spacing: 1.5px;
+      text-shadow: 1px 1px 4px rgba(180, 0, 80, 0.45);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+
+    #finalMsg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Click sparks ── */
+    .spark {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.4rem;
+      z-index: 999;
+      animation: sparkFly 0.9s ease-out forwards;
+    }
+
+    @keyframes sparkFly {
+      0%   { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -200%)  scale(0);  opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="mainText"></div>
+    <div id="progress"></div>
+    <div id="hint">✨ Bấm vào màn hình nhé~ ✨</div>
+    <div id="finalMsg">~ Tôi không cho phép em từ chối ~</div>
+  </div>
+
+  <script>
+    const fullText = "Chủ Nhật Này Cậu rảnh Không đi chơi với tớ điiiiii";
+    const chars    = Array.from(fullText);   // handles multi-byte Vietnamese chars
+    let   idx      = 0;
+    let   done     = false;
+
+    const mainText = document.getElementById("mainText");
+    const progress = document.getElementById("progress");
+    const hint     = document.getElementById("hint");
+    const finalMsg = document.getElementById("finalMsg");
+
+    // Build dots
+    chars.forEach((_, i) => {
+      const dot = document.createElement("div");
+      dot.className = "dot";
+      dot.id = "dot-" + i;
+      progress.appendChild(dot);
+    });
+
+    // ── Floating background particles ──
+    const emojis = ["🌸", "💕", "✨", "🌺", "💫", "🦋", "🍀", "⭐", "🎀", "💗"];
+
+    function spawnParticle() {
+      const el = document.createElement("div");
+      el.className = "particle";
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left     = Math.random() * 100 + "vw";
+      el.style.fontSize = (Math.random() * 1.4 + 0.7) + "rem";
+      const dur = Math.random() * 9 + 7;
+      el.style.animationDuration = dur + "s";
+      el.style.animationDelay   = (Math.random() * 4) + "s";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), (dur + 4) * 1000);
+    }
+
+    for (let i = 0; i < 10; i++) spawnParticle();
+    setInterval(spawnParticle, 1400);
+
+    // ── Click spark effect ──
+    const sparkEmojis = ["💖", "✨", "💫", "🌸", "🎀"];
+
+    function createSpark(x, y) {
+      const el = document.createElement("div");
+      el.className = "spark";
+      el.textContent = sparkEmojis[Math.floor(Math.random() * sparkEmojis.length)];
+      el.style.left = x + "px";
+      el.style.top  = y + "px";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 900);
+    }
+
+    // ── Main click handler ──
+    document.body.addEventListener("click", (e) => {
+      createSpark(e.clientX, e.clientY);
+
+      if (done) return;
+
+      // Hide hint on first click
+      if (idx === 0) hint.classList.add("hidden");
+
+      if (idx < chars.length) {
+        const span = document.createElement("span");
+        span.className = "char";
+        // Preserve spaces visually
+        span.textContent = chars[idx] === " " ? "\u00A0" : chars[idx];
+        mainText.appendChild(span);
+
+        document.getElementById("dot-" + idx).classList.add("filled");
+        idx++;
+
+        if (idx === chars.length) {
+          done = true;
+          setTimeout(() => finalMsg.classList.add("show"), 900);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
