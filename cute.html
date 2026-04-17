@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ket qua ~ Cute</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;background:linear-gradient(135deg,#ffd6e7,#ffb3d1,#f0c4f8,#c9a6f5);
+  font-family:'Quicksand',sans-serif;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1.8rem;padding:2rem;
+  overflow:hidden;cursor:default;user-select:none}
+.float{position:fixed;pointer-events:none;animation:up linear infinite;opacity:0}
+@keyframes up{0%{transform:translateY(110vh) rotate(0deg);opacity:0}
+10%{opacity:.7}90%{opacity:.7}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
+.card{background:rgba(255,255,255,.45);backdrop-filter:blur(14px);
+  border:2px solid rgba(255,255,255,.7);border-radius:28px;
+  padding:2.5rem 3rem;max-width:560px;width:100%;text-align:center;
+  box-shadow:0 12px 40px rgba(200,60,120,.18)}
+.icon{font-size:4rem;margin-bottom:.5rem}
+h1{font-family:'Dancing Script',cursive;font-size:clamp(2.2rem,7vw,3.8rem);
+  color:#d63384;text-shadow:2px 2px 0 #ff85c2;margin-bottom:.8rem}
+.sub{font-size:1.05rem;color:#8b457a;line-height:1.7;margin-bottom:1.4rem}
+.tag{display:inline-block;background:#ffb6d9;color:#8b0051;
+  border-radius:999px;padding:.35em 1.1em;font-size:.88rem;
+  font-weight:700;margin:.25rem;letter-spacing:.5px}
+.invite{margin-top:1.8rem;font-family:'Dancing Script',cursive;
+  font-size:clamp(1.5rem,5vw,2.4rem);color:#c2185b;
+  opacity:0;transform:translateY(16px);
+  transition:opacity 1.2s ease,transform 1.2s ease}
+.invite.show{opacity:1;transform:translateY(0)}
+.hearts{font-size:2rem;letter-spacing:.5rem;min-height:2.5rem}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">&#128150;</div>
+  <h1>Gu Cute &#10024;</h1>
+  <p class="sub">
+    Soft, &#7845;m &#225;p, bi&#7871;t n&#226;ng niu c&#7843;m x&#250;c ng&#432;&#7901;i kh&#225;c.<br>
+    Ki&#7875;u ng&#432;&#7901;i m&#224; campaign n&#224;o c&#361;ng c&#7847;n &#8212; gi&#7919; cho th&#432;&#417;ng hi&#7879;u lu&#244;n &#273;&#225;ng y&#234;u.
+  </p>
+  <div>
+    <span class="tag">Storytelling</span>
+    <span class="tag">Emotional Design</span>
+    <span class="tag">Brand Warmth</span>
+  </div>
+  <div class="hearts" id="hearts"></div>
+  <div class="invite" id="invite">
+    Ch&#7911; Nh&#7853;t n&#224;y... t&#7899; qua &#273;&#243;n nh&#233; &#128122;
+  </div>
+</div>
+<script>
+var emojis=["&#127800;","&#128149;","&#10024;","&#127802;","&#128156;","&#127803;","&#127809;"];
+function spawn(){
+  var el=document.createElement("div");
+  el.className="float";
+  el.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+  el.style.left=Math.random()*100+"vw";
+  el.style.fontSize=(Math.random()*.9+.5)+"rem";
+  var d=Math.random()*8+6;
+  el.style.animationDuration=d+"s";
+  el.style.animationDelay=Math.random()*3+"s";
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove()},(d+3)*1000);
+}
+for(var i=0;i<10;i++)spawn();
+setInterval(spawn,2000);
+var h=document.getElementById("hearts");
+var hArr=["&#128150;","&#128148;","&#10084;","&#128157;","&#128155;"];
+var hi=0;
+var iv=setInterval(function(){
+  if(hi<hArr.length){h.innerHTML+=hArr[hi]+" ";hi++;}
+  else clearInterval(iv);
+},300);
+setTimeout(function(){
+  document.getElementById("invite").classList.add("show");
+},hArr.length*300+800);
+</script>
+</body>
+</html>

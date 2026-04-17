@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ket qua ~ Ca tinh</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;background:#0a0a0a;
+  font-family:'Inter',sans-serif;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2rem;padding:2rem;
+  overflow:hidden;user-select:none}
+.grid{position:fixed;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none}
+.glitch{position:fixed;inset:0;pointer-events:none;animation:glitch 6s infinite}
+@keyframes glitch{
+  0%,94%,100%{background:transparent}
+  95%{background:rgba(255,0,100,.03)}
+  97%{background:rgba(0,255,200,.03)}
+}
+.card{position:relative;max-width:580px;width:100%;text-align:left;
+  border:1px solid rgba(255,255,255,.12);border-radius:4px;
+  padding:3rem;background:#111}
+.badge{display:inline-block;background:#ff003c;color:#fff;
+  font-family:'Syne',sans-serif;font-size:.7rem;font-weight:800;
+  letter-spacing:3px;padding:.3em .8em;margin-bottom:1.5rem}
+h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,8vw,4rem);
+  font-weight:800;color:#fff;line-height:1;margin-bottom:1.2rem}
+h1 span{color:#ff003c}
+.sub{font-size:1rem;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:2rem}
+.skills{display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem}
+.skill-row{display:flex;align-items:center;gap:1rem}
+.skill-name{color:rgba(255,255,255,.4);font-size:.78rem;letter-spacing:2px;width:90px;flex-shrink:0}
+.skill-bar{flex:1;height:2px;background:rgba(255,255,255,.1)}
+.skill-fill{height:100%;width:0;background:#ff003c;
+  transition:width 1s cubic-bezier(.22,1,.36,1)}
+.skill-val{color:#ff003c;font-size:.8rem;font-weight:700;width:32px;text-align:right}
+.invite{font-family:'Syne',sans-serif;font-size:clamp(1rem,3.5vw,1.4rem);
+  color:#fff;border-top:1px solid rgba(255,255,255,.1);
+  padding-top:1.5rem;margin-top:.5rem;
+  opacity:0;transform:translateY(10px);
+  transition:opacity 1s ease,transform 1s ease}
+.invite.show{opacity:1;transform:translateY(0)}
+.invite span{color:#ff003c}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div class="glitch"></div>
+<div class="card">
+  <div class="badge">RESULT</div>
+  <h1>C&#193;<span> T&#205;NH</span><br>MARKETER</h1>
+  <p class="sub">
+    Bold. Controversial. Kh&#243; khen nh&#432;ng khi ch&#7841;y l&#224; ch&#7841;y.<br>
+    Lo&#7841;i ng&#432;&#7901;i l&#224;m campaign ng&#432;&#7901;i ta nh&#7899; m&#227;i.
+  </p>
+  <div class="skills">
+    <div class="skill-row">
+      <div class="skill-name">BOLD</div>
+      <div class="skill-bar"><div class="skill-fill" id="s1"></div></div>
+      <div class="skill-val" id="v1">0%</div>
+    </div>
+    <div class="skill-row">
+      <div class="skill-name">EDGE</div>
+      <div class="skill-bar"><div class="skill-fill" id="s2"></div></div>
+      <div class="skill-val" id="v2">0%</div>
+    </div>
+    <div class="skill-row">
+      <div class="skill-name">IMPACT</div>
+      <div class="skill-bar"><div class="skill-fill" id="s3"></div></div>
+      <div class="skill-val" id="v3">0%</div>
+    </div>
+  </div>
+  <div class="invite" id="invite">
+    Ch&#7911; Nh&#7853;t n&#224;y &#8212; <span>ra ngo&#224;i kh&#244;ng?</span>
+  </div>
+</div>
+<script>
+function animBar(fillId,valId,target){
+  var fill=document.getElementById(fillId);
+  var val=document.getElementById(valId);
+  fill.style.width=target+"%";
+  var cur=0;
+  var iv=setInterval(function(){
+    cur+=2;if(cur>target)cur=target;
+    val.textContent=cur+"%";
+    if(cur>=target)clearInterval(iv);
+  },20);
+}
+setTimeout(function(){
+  animBar("s1","v1",94);
+  setTimeout(function(){animBar("s2","v2",88)},200);
+  setTimeout(function(){animBar("s3","v3",91)},400);
+},500);
+setTimeout(function(){
+  document.getElementById("invite").classList.add("show");
+},2500);
+</script>
+</body>
+</html>
