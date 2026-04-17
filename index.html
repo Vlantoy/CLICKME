@@ -80,6 +80,42 @@
       transition: opacity 1.3s ease, transform 1.3s ease;
     }
     #finalMsg.show { opacity: 1; transform: translateY(0); }
+    #buttons {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 1s ease, transform 1s ease;
+      pointer-events: none;
+    }
+    #buttons.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .btn {
+      font-family: "Quicksand", sans-serif;
+      font-size: clamp(1rem, 3.5vw, 1.4rem);
+      font-weight: 700;
+      padding: 0.7em 2em;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-yes  { background: #22c55e; color: #fff; }
+    .btn-no   { background: #ef4444; color: #fff; }
+    #replyMsg {
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2rem, 8vw, 5rem);
+      color: #fff;
+      text-shadow: 2px 2px 0 #e91e8c, 0 0 30px rgba(233,30,140,0.5);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    #replyMsg.show { opacity: 1; transform: translateY(0); }
     .petal-wrapper { position: fixed; pointer-events: none; z-index: 1000; width: 0; height: 0; will-change: transform; transform: rotate(var(--rot)); }
     .petal-inner { font-size: 1.8rem; position: absolute; will-change: transform, opacity; animation: petalBloom 1s ease-out forwards; animation-delay: var(--delay, 0s); }
     @keyframes petalBloom {
@@ -103,6 +139,11 @@
     <div id="progress"></div>
     <div id="hint">✨ Bấm vào màn hình nhé~ ✨</div>
     <div id="finalMsg">~ Tôi không cho phép em từ chối ~</div>
+    <div id="buttons">
+      <button class="btn btn-yes" onclick="answer()">Có ạ 🥺</button>
+      <button class="btn btn-no"  onclick="answer()">Có, nhưng... 😳</button>
+    </div>
+    <div id="replyMsg">8h sáng chủ nhật tớ qua đón đi nhé 🥰</div>
   </div>
   <script>
     var words = ["Chủ","Nhật","Này","Cậu","rảnh","Không","đi","chơi","với","tớ","điiiiii"];
@@ -111,6 +152,15 @@
     var progress = document.getElementById("progress");
     var hint     = document.getElementById("hint");
     var finalMsg = document.getElementById("finalMsg");
+    var buttons   = document.getElementById("buttons");
+    var replyMsg  = document.getElementById("replyMsg");
+
+    function answer() {
+      buttons.classList.remove("show");
+      setTimeout(function() {
+        replyMsg.classList.add("show");
+      }, 400);
+    }
     words.forEach(function(_, i) {
       var dot = document.createElement("div");
       dot.className = "dot";
@@ -181,7 +231,10 @@
               sp.textContent = w;
               mainText.appendChild(sp);
             });
-            setTimeout(function() { finalMsg.classList.add("show"); }, 700);
+            setTimeout(function() {
+              finalMsg.classList.add("show");
+              setTimeout(function() { buttons.classList.add("show"); }, 1200);
+            }, 700);
           }, 1000);
         } else {
           mainText.innerHTML = "";
