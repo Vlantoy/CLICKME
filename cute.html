@@ -32,11 +32,12 @@ h1{font-family:'Dancing Script',cursive;font-size:clamp(2.2rem,7vw,3.8rem);
 .invite.show{opacity:1;transform:translateY(0)}
 .hearts{font-size:2rem;letter-spacing:.5rem;min-height:2.5rem}
 /* ── invite phase ── */
-#phase2{display:none;width:100%;max-width:560px;text-align:center}
-#mainText{font-family:'Dancing Script',cursive;font-size:clamp(4rem,28vw,18rem);color:#d63384;
+#phase2{display:none;width:100%;max-width:560px;text-align:center;
+  height:100vh;flex-direction:column;justify-content:center;align-items:center;gap:1rem;padding:1.5rem}
+#mainText{font-family:'Dancing Script',cursive;font-size:clamp(3rem,20vw,12rem);color:#d63384;
   text-shadow:3px 3px 0 #ff85c2,0 0 40px rgba(214,51,132,.4);
-  min-height:1.2em;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 .2em;padding:.5rem;transition:font-size .5s ease}
-#mainText.full{font-size:clamp(2rem,7vw,7rem);line-height:1.5}
+  min-height:1em;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 .2em;padding:.3rem;transition:font-size .5s ease}
+#mainText.full{font-size:clamp(1.6rem,5vw,4.5rem);line-height:1.4}
 .word{display:inline-block}
 #progress{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .dot{width:11px;height:11px;border-radius:50%;background:rgba(214,51,132,.25);transition:background .25s,transform .25s}
@@ -124,9 +125,11 @@ setTimeout(function(){
   card.style.opacity='0';card.style.transform='translateY(-20px)';
   setTimeout(function(){
     card.style.display='none';
-    document.body.style.justifyContent='flex-start';
-    document.body.style.paddingTop='2rem';
-    document.getElementById('phase2').style.display='block';
+    document.body.style.overflow='hidden';
+    document.body.style.justifyContent='center';
+    document.body.style.padding='0';
+    var p2=document.getElementById('phase2');
+    p2.style.display='flex';
     initInvite();
   },800);
 },hArr.length*300+3200);
