@@ -117,10 +117,6 @@ var iv=setInterval(function(){
   if(hi<hArr.length){h.innerHTML+=hArr[hi]+" ";hi++;}
   else clearInterval(iv);
 },300);
-setTimeout(function(){
-  document.getElementById("invite").classList.add("show");
-},hArr.length*300+800);
-
 // After card fades, transition to word-by-word
 setTimeout(function(){
   var card=document.querySelector('.card');
