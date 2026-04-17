@@ -4,14 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cho To Hoi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #ffd6e7 0%, #ffb3d1 25%, #e8b4f8 50%, #c9a6f5 75%, #a8d8f0 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 10s ease infinite;
+      background: linear-gradient(135deg, #ffd6e7 0%, #f0b8e8 30%, #d8b4fe 65%, #a8d8f0 100%);
       font-family: "Quicksand", sans-serif;
       cursor: pointer;
       user-select: none;
@@ -21,12 +19,7 @@
       align-items: center;
       justify-content: center;
     }
-    @keyframes gradientShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .particle { position: fixed; pointer-events: none; animation: floatUp linear infinite; opacity: 0; }
+    .particle { position: fixed; pointer-events: none; will-change: transform; animation: floatUp linear infinite; opacity: 0; }
     @keyframes floatUp {
       0%   { transform: translateY(110vh) rotate(0deg);  opacity: 0; }
       10%  { opacity: 0.8; }
@@ -45,7 +38,7 @@
       gap: 1.5rem;
     }
     #mainText {
-      font-family: "Dancing Script", cursive;
+      font-family: "Great Vibes", cursive;
       font-size: clamp(5rem, 22vw, 18rem);
       color: #fff;
       text-shadow: 4px 4px 0 #e91e8c, 8px 8px 0 #c2185b, 0 0 60px rgba(233,30,140,0.6);
@@ -86,8 +79,8 @@
       transition: opacity 1.3s ease, transform 1.3s ease;
     }
     #finalMsg.show { opacity: 1; transform: translateY(0); }
-    .petal-wrapper { position: fixed; pointer-events: none; z-index: 1000; width: 0; height: 0; transform: rotate(var(--rot)); }
-    .petal-inner { font-size: 2rem; position: absolute; animation: petalBloom 1.2s ease-out forwards; animation-delay: var(--delay, 0s); }
+    .petal-wrapper { position: fixed; pointer-events: none; z-index: 1000; width: 0; height: 0; will-change: transform; transform: rotate(var(--rot)); }
+    .petal-inner { font-size: 1.8rem; position: absolute; will-change: transform, opacity; animation: petalBloom 1s ease-out forwards; animation-delay: var(--delay, 0s); }
     @keyframes petalBloom {
       0%   { transform: translate(-50%,-50%) translateY(0px)    scale(0);   opacity: 0; }
       15%  {                                                                  opacity: 1; }
@@ -136,23 +129,23 @@
       document.body.appendChild(el);
       setTimeout(function() { el.remove(); }, (dur + 4) * 1000);
     }
-    for (var i = 0; i < 14; i++) spawnParticle();
-    setInterval(spawnParticle, 1300);
+    for (var i = 0; i < 5; i++) spawnParticle();
+    setInterval(spawnParticle, 3000);
     var petalEmojis = ["🌸","🌺","🌹","🌼","💮","🌷","🌻"];
     function createFlowerBloom(x, y) {
-      for (var p = 0; p < 8; p++) {
+      for (var p = 0; p < 5; p++) {
         var wrapper = document.createElement("div");
         wrapper.className = "petal-wrapper";
         wrapper.style.left = x + "px";
         wrapper.style.top  = y + "px";
-        wrapper.style.setProperty("--rot", (p * 45) + "deg");
+        wrapper.style.setProperty("--rot", (p * 72) + "deg");
         var inner = document.createElement("div");
         inner.className = "petal-inner";
         inner.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
-        inner.style.setProperty("--delay", (p * 0.045) + "s");
+        inner.style.setProperty("--delay", (p * 0.05) + "s");
         wrapper.appendChild(inner);
         document.body.appendChild(wrapper);
-        setTimeout(function() { this.remove(); }.bind(wrapper), 1500);
+        setTimeout(function() { this.remove(); }.bind(wrapper), 1300);
       }
       var center = document.createElement("div");
       center.className = "petal-center";
@@ -160,7 +153,7 @@
       center.style.left = x + "px";
       center.style.top  = y + "px";
       document.body.appendChild(center);
-      setTimeout(function() { center.remove(); }, 900);
+      setTimeout(function() { center.remove(); }, 800);
     }
     document.body.addEventListener("click", function(e) {
       createFlowerBloom(e.clientX, e.clientY);
