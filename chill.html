@@ -41,6 +41,34 @@ h1{font-size:clamp(2rem,7vw,3.2rem);font-weight:700;
   opacity:0;transform:translateY(16px);
   transition:opacity 1.2s ease,transform 1.2s ease}
 .invite.show{opacity:1;transform:translateY(0)}
+/* ── invite phase ── */
+#phase2{display:none;width:100%;max-width:560px;text-align:center}
+#mainText{font-size:clamp(4rem,28vw,18rem);font-weight:700;color:#e2d9f3;
+  text-shadow:0 0 40px rgba(167,139,250,.5);font-family:'Space Grotesk',sans-serif;
+  min-height:1.2em;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 .2em;padding:.5rem;transition:font-size .5s ease}
+#mainText.full{font-size:clamp(1.8rem,6vw,6rem);line-height:1.5}
+.word{display:inline-block}
+#progress{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.dot{width:11px;height:11px;border-radius:50%;background:rgba(167,139,250,.2);transition:background .25s,transform .25s}
+.dot.filled{background:#a78bfa;transform:scale(1.5)}
+#hint{font-size:1.05rem;color:rgba(167,139,250,.8);font-style:italic;animation:pulse 1.6s ease-in-out infinite;letter-spacing:1px}
+#hint.hidden{display:none}
+@keyframes pulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+#finalMsg{font-size:clamp(.9rem,2.2vw,1.1rem);color:rgba(255,255,255,.65);font-style:italic;letter-spacing:1.8px;
+  opacity:0;transform:translateY(20px);transition:opacity 1.3s ease,transform 1.3s ease}
+#finalMsg.show{opacity:1;transform:translateY(0)}
+#buttons{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;
+  opacity:0;transform:translateY(16px);transition:opacity 1s ease,transform 1s ease;pointer-events:none}
+#buttons.show{opacity:1;transform:translateY(0);pointer-events:all}
+.btn{font-family:'Space Grotesk',sans-serif;font-size:clamp(1rem,3.5vw,1.4rem);font-weight:700;
+  padding:.7em 2em;border:none;border-radius:999px;cursor:pointer;letter-spacing:1px;
+  box-shadow:0 4px 18px rgba(0,0,0,.3);transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.95)}
+.btn-yes{background:#22c55e;color:#fff}.btn-no{background:#ef4444;color:#fff}
+#replyMsg{font-size:clamp(1.5rem,6vw,4rem);font-weight:700;color:#c4b5fd;
+  text-shadow:0 0 30px rgba(167,139,250,.5);
+  opacity:0;transform:translateY(16px);transition:opacity 1.2s ease,transform 1.2s ease}
+#replyMsg.show{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
@@ -72,6 +100,19 @@ h1{font-size:clamp(2rem,7vw,3.2rem);font-weight:700;
     &#127774; Ch&#7911; Nh&#7853;t... ra ngo&#224;i ch&#249;t kh&#244;ng?
   </div>
 </div>
+
+<!-- phase 2: word-by-word invite -->
+<div id="phase2">
+  <div id="mainText"></div>
+  <div id="progress"></div>
+  <div id="hint">&#127775; B&#7845;m v&#224;o m&#224;n h&#236;nh nh&#233;~ &#127775;</div>
+  <div id="finalMsg">~ T&#244;i kh&#244;ng cho ph&#233;p em t&#7915; ch&#7889;i ~</div>
+  <div id="buttons">
+    <button class="btn btn-yes" onclick="answer()">co&#225;</button>
+    <button class="btn btn-no" onclick="answer()">c&#243;, nh&#432;ng m&#224;u &#273;&#7887;</button>
+  </div>
+  <div id="replyMsg">8h s&#225;ng ch&#7911; nh&#7853;t t&#7899; qua &#273;&#243;n &#273;i nh&#233; &#128522;</div>
+</div>
 <script>
 for(var i=0;i<80;i++){
   var s=document.createElement("div");
@@ -88,6 +129,47 @@ setTimeout(function(){
 setTimeout(function(){
   document.getElementById("invite").classList.add("show");
 },2200);
+
+// Transition to word-by-word after 5s
+setTimeout(function(){
+  var card=document.querySelector('.card');
+  card.style.transition='opacity .8s ease,transform .8s ease';
+  card.style.opacity='0';card.style.transform='translateY(-20px)';
+  setTimeout(function(){
+    card.style.display='none';
+    document.getElementById('phase2').style.display='block';
+    initInvite();
+  },800);
+},5000);
+
+function initInvite(){
+  var words=["Ch\u1ee7","Nh\u1eadt","N\u00e0y","C\u1eadu","r\u1ea3nh","Kh\u00f4ng","\u0111i","ch\u01a1i","v\u1edbi","t\u1edb","\u0111i\u0069\u0069\u0069\u0069\u0069"];
+  var idx=0,done=false;
+  var mt=document.getElementById('mainText');
+  var prog=document.getElementById('progress');
+  var hint=document.getElementById('hint');
+  var finalMsg=document.getElementById('finalMsg');
+  var buttons=document.getElementById('buttons');
+  var replyMsg=document.getElementById('replyMsg');
+  words.forEach(function(_,i){var d=document.createElement('div');d.className='dot';d.id='dot-'+i;prog.appendChild(d);});
+  document.body.addEventListener('click',function(e){
+    if(done)return;
+    if(idx===0)hint.classList.add('hidden');
+    if(idx<words.length){
+      var isLast=(idx===words.length-1);
+      if(isLast){
+        mt.innerHTML='';var ls=document.createElement('span');ls.className='word';ls.textContent=words[idx];mt.appendChild(ls);
+        document.getElementById('dot-'+idx).classList.add('filled');
+        idx=words.length;done=true;
+        setTimeout(function(){mt.innerHTML='';mt.classList.add('full');words.forEach(function(w){var sp=document.createElement('span');sp.className='word';sp.textContent=w;mt.appendChild(sp);});setTimeout(function(){finalMsg.classList.add('show');setTimeout(function(){buttons.classList.add('show');},1200);},700);},1000);
+      } else {
+        mt.innerHTML='';var sp=document.createElement('span');sp.className='word';sp.textContent=words[idx];mt.appendChild(sp);
+        document.getElementById('dot-'+idx).classList.add('filled');idx++;
+      }
+    }
+  });
+  window.answer=function(){buttons.classList.remove('show');setTimeout(function(){replyMsg.classList.add('show');},400);};
+}
 </script>
 </body>
 </html>

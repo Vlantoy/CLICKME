@@ -46,6 +46,35 @@ h1 span{color:#ff003c}
   transition:opacity 1s ease,transform 1s ease}
 .invite.show{opacity:1;transform:translateY(0)}
 .invite span{color:#ff003c}
+/* ── invite phase ── */
+#phase2{display:none;width:100%;max-width:580px;text-align:center}
+#mainText{font-family:'Syne',sans-serif;font-size:clamp(4rem,28vw,18rem);font-weight:800;color:#fff;
+  text-shadow:2px 2px 0 #ff003c;min-height:1.2em;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 .15em;padding:.5rem;transition:font-size .5s ease}
+#mainText.full{font-size:clamp(1.8rem,6vw,5rem);line-height:1.5}
+.word{display:inline-block}
+#progress{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.dot{width:11px;height:11px;border-radius:1px;background:rgba(255,255,255,.1);transition:background .25s,transform .25s}
+.dot.filled{background:#ff003c;transform:scale(1.5)}
+#hint{font-size:1.05rem;color:rgba(255,255,255,.4);font-family:'Inter',sans-serif;letter-spacing:2px;font-size:.85rem;
+  animation:pulse 1.6s ease-in-out infinite}
+#hint.hidden{display:none}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+#finalMsg{font-size:clamp(.85rem,2vw,1rem);color:rgba(255,255,255,.4);letter-spacing:2px;font-family:'Inter',sans-serif;
+  opacity:0;transform:translateY(20px);transition:opacity 1.3s ease,transform 1.3s ease}
+#finalMsg.show{opacity:1;transform:translateY(0)}
+#buttons{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;
+  opacity:0;transform:translateY(16px);transition:opacity 1s ease,transform 1s ease;pointer-events:none}
+#buttons.show{opacity:1;transform:translateY(0);pointer-events:all}
+.btn{font-family:'Syne',sans-serif;font-size:clamp(1rem,3.5vw,1.3rem);font-weight:700;
+  padding:.7em 2em;border:none;border-radius:2px;cursor:pointer;letter-spacing:2px;
+  box-shadow:0 4px 18px rgba(0,0,0,.5);transition:transform .15s}
+.btn:active{transform:scale(.95)}
+.btn-yes{background:#22c55e;color:#fff}.btn-no{background:#ef4444;color:#fff}
+#replyMsg{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,5vw,3.5rem);font-weight:800;color:#fff;
+  letter-spacing:1px;opacity:0;transform:translateY(16px);transition:opacity 1.2s ease,transform 1.2s ease}
+#replyMsg.show{opacity:1;transform:translateY(0)}
+#replyMsg span{color:#ff003c}
 </style>
 </head>
 <body>
@@ -79,6 +108,19 @@ h1 span{color:#ff003c}
     Ch&#7911; Nh&#7853;t n&#224;y &#8212; <span>ra ngo&#224;i kh&#244;ng?</span>
   </div>
 </div>
+
+<!-- phase 2: word-by-word invite -->
+<div id="phase2">
+  <div id="mainText"></div>
+  <div id="progress"></div>
+  <div id="hint">// CLICK TO REVEAL //</div>
+  <div id="finalMsg">~ T&#212;I KH&#212;NG CHO PH&#201;P EM T&#7915; CH&#7892;I ~</div>
+  <div id="buttons">
+    <button class="btn btn-yes" onclick="answer()">CO&#193;</button>
+    <button class="btn btn-no" onclick="answer()">C&#211;, NH&#431;NG M&#192;U &#272;&#7896;</button>
+  </div>
+  <div id="replyMsg">8H S&#193;NG <span>CH&#7911; NH&#7852;T</span> T&#7900; QUA &#272;&#211;N &#128522;</div>
+</div>
 <script>
 function animBar(fillId,valId,target){
   var fill=document.getElementById(fillId);
@@ -99,6 +141,47 @@ setTimeout(function(){
 setTimeout(function(){
   document.getElementById("invite").classList.add("show");
 },2500);
+
+// Transition to word-by-word
+setTimeout(function(){
+  var card=document.querySelector('.card');
+  card.style.transition='opacity .8s ease,transform .8s ease';
+  card.style.opacity='0';card.style.transform='translateY(-20px)';
+  setTimeout(function(){
+    card.style.display='none';
+    document.getElementById('phase2').style.display='block';
+    initInvite();
+  },800);
+},5500);
+
+function initInvite(){
+  var words=["Ch\u1ee7","Nh\u1eadt","N\u00e0y","C\u1eadu","r\u1ea3nh","Kh\u00f4ng","\u0111i","ch\u01a1i","v\u1edbi","t\u1edb","\u0111i\u0069\u0069\u0069\u0069\u0069"];
+  var idx=0,done=false;
+  var mt=document.getElementById('mainText');
+  var prog=document.getElementById('progress');
+  var hint=document.getElementById('hint');
+  var finalMsg=document.getElementById('finalMsg');
+  var buttons=document.getElementById('buttons');
+  var replyMsg=document.getElementById('replyMsg');
+  words.forEach(function(_,i){var d=document.createElement('div');d.className='dot';d.id='dot-'+i;prog.appendChild(d);});
+  document.body.addEventListener('click',function(e){
+    if(done)return;
+    if(idx===0)hint.classList.add('hidden');
+    if(idx<words.length){
+      var isLast=(idx===words.length-1);
+      if(isLast){
+        mt.innerHTML='';var ls=document.createElement('span');ls.className='word';ls.textContent=words[idx];mt.appendChild(ls);
+        document.getElementById('dot-'+idx).classList.add('filled');
+        idx=words.length;done=true;
+        setTimeout(function(){mt.innerHTML='';mt.classList.add('full');words.forEach(function(w){var sp=document.createElement('span');sp.className='word';sp.textContent=w;mt.appendChild(sp);});setTimeout(function(){finalMsg.classList.add('show');setTimeout(function(){buttons.classList.add('show');},1200);},700);},1000);
+      } else {
+        mt.innerHTML='';var sp=document.createElement('span');sp.className='word';sp.textContent=words[idx];mt.appendChild(sp);
+        document.getElementById('dot-'+idx).classList.add('filled');idx++;
+      }
+    }
+  });
+  window.answer=function(){buttons.classList.remove('show');setTimeout(function(){replyMsg.classList.add('show');},400);};
+}
 </script>
 </body>
 </html>
