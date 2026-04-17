@@ -10,7 +10,7 @@
 body{min-height:100vh;background:linear-gradient(135deg,#ffd6e7,#ffb3d1,#f0c4f8,#c9a6f5);
   font-family:'Quicksand',sans-serif;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:1.8rem;padding:2rem;
-  overflow:hidden;cursor:default;user-select:none}
+  overflow-x:hidden;cursor:default;user-select:none}
 .float{position:fixed;pointer-events:none;animation:up linear infinite;opacity:0}
 @keyframes up{0%{transform:translateY(110vh) rotate(0deg);opacity:0}
 10%{opacity:.7}90%{opacity:.7}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
@@ -124,6 +124,8 @@ setTimeout(function(){
   card.style.opacity='0';card.style.transform='translateY(-20px)';
   setTimeout(function(){
     card.style.display='none';
+    document.body.style.justifyContent='flex-start';
+    document.body.style.paddingTop='2rem';
     document.getElementById('phase2').style.display='block';
     initInvite();
   },800);
