@@ -54,13 +54,29 @@
       width: 100%;
       text-align: center;
       min-height: 1.2em;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0 0.25em;
+      transition: font-size 0.6s ease;
     }
-    .word { display: inline-block; animation: popIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
-    @keyframes popIn {
-      0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
-      60%  { transform: scale(1.4) rotate(6deg); }
-      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    #mainText.full {
+      font-size: clamp(2rem, 6vw, 5rem);
+      line-height: 1.4;
     }
+    .word { display: inline-block; }
+    /* Position-based entry animations */
+    @keyframes fromTop    { from { transform: translateY(-110vh); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes fromBottom { from { transform: translateY(110vh);  opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes fromLeft   { from { transform: translateX(-110vw); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fromRight  { from { transform: translateX(110vw);  opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes spinIn     { from { transform: rotate(-540deg) scale(0); opacity: 0; } to { transform: rotate(0deg) scale(1); opacity: 1; } }
+    .anim-top    { animation: fromTop    0.55s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-bottom { animation: fromBottom 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-left   { animation: fromLeft   0.55s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-right  { animation: fromRight  0.55s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-center { animation: spinIn     0.65s cubic-bezier(0.22,1,0.36,1) both; }
     #progress { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
     .dot { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.28); transition: background 0.25s, transform 0.25s; }
     .dot.filled { background: rgba(255,255,255,0.95); transform: scale(1.5); }
@@ -157,21 +173,51 @@
       document.body.appendChild(center);
       setTimeout(function() { center.remove(); }, 900);
     }
+    function getZone(x, y) {
+      var rx = x / window.innerWidth;
+      var ry = y / window.innerHeight;
+      if (ry < 0.25) return "top";
+      if (ry > 0.75) return "bottom";
+      if (rx < 0.25) return "left";
+      if (rx > 0.75) return "right";
+      return "center";
+    }
+
     document.body.addEventListener("click", function(e) {
       createFlowerBloom(e.clientX, e.clientY);
       if (done) return;
       if (idx === 0) hint.classList.add("hidden");
       if (idx < words.length) {
-        mainText.innerHTML = "";
-        var span = document.createElement("span");
-        span.className = "word";
-        span.textContent = words[idx];
-        mainText.appendChild(span);
-        document.getElementById("dot-" + idx).classList.add("filled");
-        idx++;
-        if (idx === words.length) {
+        var zone = getZone(e.clientX, e.clientY);
+        var isLast = (idx === words.length - 1);
+
+        if (isLast) {
+          /* Last click: reveal full sentence */
+          mainText.innerHTML = "";
+          mainText.classList.add("full");
+          words.forEach(function(w, wi) {
+            var sp = document.createElement("span");
+            sp.className = "word anim-" + zone;
+            sp.style.animationDelay = (wi * 0.07) + "s";
+            sp.textContent = w;
+            mainText.appendChild(sp);
+          });
+          /* fill all remaining dots */
+          for (var di = idx; di < words.length; di++) {
+            document.getElementById("dot-" + di).classList.add("filled");
+          }
+          idx = words.length;
           done = true;
-          setTimeout(function() { finalMsg.classList.add("show"); }, 900);
+          setTimeout(function() { finalMsg.classList.add("show"); }, words.length * 70 + 600);
+        } else {
+          /* Normal click: show one word */
+          mainText.innerHTML = "";
+          var span = document.createElement("span");
+          span.className = "word anim-" + zone;
+          span.textContent = words[idx];
+          mainText.appendChild(span);
+          document.getElementById("dot-" + idx).classList.add("filled");
+          idx++;
         }
       }
     });
